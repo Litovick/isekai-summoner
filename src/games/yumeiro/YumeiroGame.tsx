@@ -7,7 +7,7 @@ import "./styles.css";
 type SaveData={step:number;skill:number;team:number;history:number[];phase:"intro"|"choose"|"reaction"|"end";last:number};
 const initial:SaveData={step:0,skill:50,team:50,history:[],phase:"intro",last:0};
 const KEY="isekai-yumeiro-v1";
-const desserts:Record<Dessert,{name:string;icon:string;desc:string}>={strawberry:{name:"딸기 쇼트케이크",icon:"🍓",desc:"친구들의 마음을 담은 부드러운 달콤함"},chocolate:{name:"초콜릿 케이크",icon:"🍫",desc:"섬세한 기술로 완성한 깊은 풍미"},creative:{name:"창작 디저트",icon:"🍰",desc:"자신만의 상상력을 담은 새로운 맛"}};
+const desserts:Record<Dessert,{name:string;icon:string;desc:string}>={strawberry:{name:"딸기 타르트",icon:"🍓",desc:"친구들의 마음을 담은 부드러운 달콤함"},chocolate:{name:"초콜릿 케이크",icon:"🍫",desc:"섬세한 기술로 완성한 깊은 풍미"},creative:{name:"창작 디저트",icon:"🍰",desc:"자신만의 상상력을 담은 새로운 맛"}};
 function load():SaveData{try{const v=JSON.parse(localStorage.getItem(KEY)||"null");if(v&&Number.isInteger(v.step)&&v.step>=0&&v.step<stages.length&&Array.isArray(v.history)&&["intro","choose","reaction","end"].includes(v.phase))return v}catch{}return initial}
 export default function YumeiroGame(){
 const [game,setGame]=useState<SaveData>(load);
