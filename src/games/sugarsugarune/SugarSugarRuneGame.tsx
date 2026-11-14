@@ -45,6 +45,16 @@ const initial:Save={phase:"title",index:0,line:0,heart:50,virtue:50,answers:[],u
 const key="isekai:sugarsugarune:v1";
 const clamp=(v:number)=>Math.max(0,Math.min(100,v));
 const backgrounds=[classroom,garden,witchHouse,street,darkMagic,palace];
+// Original anime stills (external image hosts). Existing SVGs remain as offline fallbacks.
+const animeBackdrops:Record<string,string>={
+  [classroom]:"https://i.pinimg.com/originals/51/13/e3/5113e399e21134b74acd1a796b2a7879.jpg",
+  [garden]:"https://i1.sndcdn.com/artworks-000197285012-2iqijv-t500x500.jpg",
+  [witchHouse]:"https://2img.net/h/i146.photobucket.com/albums/r261/NarutoTeen/Sugar%20Sugar%20Rune/58.jpg",
+  [street]:"https://image2.b-ch.com/fix/1142h.png?hh=540&impolicy=fitin&ww=960",
+  [darkMagic]:"https://cgworld.jp/article/03_B3.jpg",
+  [palace]:"https://cgworld.jp/article/04_H.jpg",
+};
+
 const portraits:Partial<Record<Character,string>>={쇼콜라:`${import.meta.env.BASE_URL}sugarsugarune/characters/chocolat.png?v=5692b8ac`,바닐라:`${import.meta.env.BASE_URL}sugarsugarune/characters/vanilla.png?v=167927f4`,피에르:`${import.meta.env.BASE_URL}sugarsugarune/characters/pierre.png?v=eb8ba196`,로빈:`${import.meta.env.BASE_URL}sugarsugarune/characters/robin.png?v=ac86edb4`};
 function sound(type:"click"|"good"|"bad",muted:boolean){if(muted)return;try{const Ctx=window.AudioContext;const ctx=new Ctx();const osc=ctx.createOscillator();const gain=ctx.createGain();osc.type="sine";osc.frequency.value=type==="good"?880:type==="bad"?260:600;gain.gain.setValueAtTime(.025,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.14);osc.connect(gain);gain.connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+.14);osc.onended=()=>void ctx.close()}catch{/* Audio is optional */}}
 function CharacterCard({name,active}:{name:Character;active:boolean}){const img=portraits[name];return <div className={`ssr-character ${active?"active":""}`}><div className="ssr-avatar">{img?<img src={img} alt={name}/>:<span>{name==="쇼콜라"?"🍫":name==="바닐라"?"🍦":name==="피에르"?"🌙":"🎩"}</span>}</div><span className="ssr-character-name">{name}</span></div>}
@@ -63,7 +73,7 @@ const next=()=>{sound("click",s.muted);if(current&&showText<current.text.length)
 const choose=(i:number)=>{if(s.phase!=="choice"||s.answers[s.index]!==undefined)return;const c=stage.choices[i];const type=c.heart+c.virtue>=0?"good":"bad";sound(type,s.muted);setFlash(type);window.setTimeout(()=>setFlash(null),650);setS(p=>({...p,heart:clamp(p.heart+c.heart),virtue:clamp(p.virtue+c.virtue),answers:[...p.answers,i],phase:"reaction",line:0}))};
 const restart=(phase:Phase="opening")=>{sound("click",s.muted);setS(p=>({...initial,phase,unlocked:p.unlocked,muted:p.muted}))};
 const backdrop=s.phase==="title"||s.phase==="guide"||s.phase==="collection"?titleBackdrop:s.phase==="opening"?witchHouse:s.phase==="ending"?palace:stage.background;
-return <div className="ssr-game" style={{backgroundImage:`linear-gradient(90deg,rgba(17,6,31,.55),rgba(17,6,31,.16)),url("${backdrop}")`}}>
+return <div className="ssr-game" style={{backgroundImage:`linear-gradient(90deg,rgba(17,6,31,.68),rgba(17,6,31,.30)),url("${animeBackdrops[backdrop]??backdrop}"),url("${backdrop}")`}}>
 <div className="ssr-vignette"/><div className="ssr-stars" aria-hidden="true">✧ · ✦ · ✧ · ✦ · ✧</div>
 {flash&&<div className={`ssr-flash ${flash}`} aria-hidden="true">{flash==="good"?"✦ ♥ ✦":"✧"}</div>}
 <header className="ssr-header"><div className="ssr-brand"><span>✧ SUGAR SUGAR RUNE ✧</span><small>QUEEN'S HEART TRIAL</small></div><div className="ssr-header-actions"><button aria-label={s.muted?"소리 켜기":"소리 끄기"} onClick={()=>setS(p=>({...p,muted:!p.muted}))}>{s.muted?<VolumeX size={18}/>:<Volume2 size={18}/>}</button><button onClick={()=>setS(p=>({...p,phase:"title",line:0}))} aria-label="타이틀로"><Home size={18}/></button></div></header>
