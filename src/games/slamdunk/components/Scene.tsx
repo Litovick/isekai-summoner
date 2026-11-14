@@ -46,8 +46,8 @@ export function Backdrop({ theme, bg, children }: { theme: Theme; bg: string; ch
                 SHOHOKU <span className="text-foreground">00 : 00</span> GUEST
               </div>
             </div>
-            <div className="absolute bottom-0 left-1/2 h-24 w-40 -translate-x-1/2 rounded-sm border-4 border-foreground/70 border-b-0">
-              <div className="absolute -bottom-1 left-1/2 h-4 w-14 -translate-x-1/2 rounded-b-full border-4 border-primary" />
+            <div className="hidden">
+              
             </div>
             {evening && <div className="absolute inset-0 bg-ink/50" />}
           </div>

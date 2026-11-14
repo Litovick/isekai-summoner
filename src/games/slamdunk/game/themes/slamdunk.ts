@@ -1,3 +1,4 @@
+import img_coach_new from "../../assets/coach-new.webp";
 import img_hanna from "../../assets/char-hanna.png";
 import img_baekho from "../../assets/char-baekho.png";
 import img_taewoong from "../../assets/char-taewoong.png";
@@ -27,7 +28,7 @@ export const slamdunk: Theme = {
     chisu: { id: "chisu", image: img_chisu, name: "채치수", number: "4", tone: "primary" },
     taeseop: { id: "taeseop", image: img_taeseop, name: "송태섭", number: "7", tone: "ink" },
     daeman: { id: "daeman", image: img_daeman, name: "정대만", number: "14", tone: "primary" },
-    coach: { id: "coach", image: img_coach, name: "안 감독", tone: "court" },
+    coach: { id: "coach", image: img_coach_new, name: "안 감독", tone: "court" },
     bench: { id: "bench", image: img_bench, name: "벤치 선수", number: "12", tone: "muted" },
     player: { id: "player", image: img_bench, name: "선수", number: "8", tone: "muted" },
   },

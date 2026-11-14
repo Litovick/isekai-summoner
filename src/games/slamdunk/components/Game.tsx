@@ -166,9 +166,9 @@ export function Game({ theme }: { theme: Theme }) {
       )}
 
       {/* Bottom panel */}
-      <section className="absolute inset-x-0 bottom-0 z-20 p-3 md:p-6">
+      <section className="slam-bottom-panel absolute inset-x-0 bottom-0 z-20 p-3 md:p-6">
         {showBanner ? (
-          <div className="animate-scene mx-auto max-w-3xl border-4 border-ink bg-card p-6 text-center text-card-foreground shadow-[8px_8px_0_var(--ink)]">
+          <div className="slam-story-banner animate-scene mx-auto max-w-3xl p-6 text-center">
             <p className="font-display text-3xl text-primary md:text-4xl">「{theme.openingBanner}」</p>
             {theme.openingGuide.map((g) => <p key={g} className="mt-3">{g}</p>)}
             <button onClick={() => { click(); setS((p) => ({ ...p, phase: "question", qIndex: 0, step: 0 })); }} className="mt-5 border-4 border-ink bg-primary px-6 py-2 font-display text-xl text-primary-foreground hover:bg-trust">첫 번째 상황으로 ▶</button>
@@ -211,11 +211,11 @@ export function Game({ theme }: { theme: Theme }) {
             />
             {showChoices && (
               <div className="animate-scene mt-3">
-                <p className="mb-2 bg-ink/85 px-3 py-1 font-bold text-ball">{q.prompt}</p>
-                <div className="grid gap-2 md:grid-cols-3">
+                <p className="slam-choice-prompt mb-2 px-3 py-2 font-bold text-ball">{q.prompt}</p>
+                <div className="slam-choice-grid grid gap-2 md:grid-cols-3">
                   {q.choices.map((c, i) => (
-                    <button key={i} onClick={() => onPick(i)} className="group flex items-start gap-3 border-4 border-ink bg-card p-3 text-left text-sm text-card-foreground shadow-[4px_4px_0_var(--ink)] transition hover:-translate-y-1 hover:bg-primary hover:text-primary-foreground">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center bg-ink font-display text-xl text-ball group-hover:text-foreground">{"ABC"[i]}</span>
+                    <button key={i} onClick={() => onPick(i)} className="slam-choice group flex items-start gap-3 p-3 text-left text-sm transition">
+                      <span className="slam-choice-letter flex h-9 w-9 shrink-0 items-center justify-center font-display text-xl">{"ABC"[i]}</span>
                       <span>{c.label}</span>
                     </button>
                   ))}
@@ -250,9 +250,9 @@ function Dialog({ name, text, canAdvance, onAdvance }: { name?: string | undefin
       tabIndex={0}
       onClick={() => (!done ? finish() : canAdvance && onAdvance())}
       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); if (!done) finish(); else if (canAdvance) onAdvance(); } }}
-      className="relative min-h-[110px] cursor-pointer select-none border-4 border-ink bg-ink/80 p-4 pt-5 text-foreground backdrop-blur-sm"
+      className="slam-dialog relative min-h-[110px] cursor-pointer select-none p-4 pt-5 text-foreground"
     >
-      {name && <div className="absolute -top-4 left-4 border-2 border-ink bg-primary px-3 py-0.5 font-display text-primary-foreground">{name}</div>}
+      {name && <div className="slam-speaker absolute -top-4 left-4 px-3 py-1 font-display text-primary-foreground">{name}</div>}
       <p className={cn("text-base leading-relaxed md:text-lg", !name && "italic text-foreground/85")}>{name ? `"${shown}"` : shown}</p>
       {done && canAdvance && <span className="absolute bottom-2 right-3 animate-pulse text-ball">▼ 클릭</span>}
     </div>
