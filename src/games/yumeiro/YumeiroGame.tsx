@@ -2,7 +2,7 @@ import {useEffect,useState} from "react";
 import {ChefHat,Heart,ArrowRight,RotateCcw,Save,Sparkles} from "lucide-react";
 import {stages,clamp,dessertOf,endingOf,type Dessert} from "./story";
 import cover from "../../assets/anime/17_yumeiro.webp";
-import {characterArt,sceneArt,dessertArt} from "./art";
+import {characterArt,sceneArt,dessertArt,portraitFocus} from "./art";
 import "./styles.css";
 type SaveData={step:number;skill:number;team:number;history:number[];phase:"intro"|"choose"|"reaction"|"end";last:number};
 const initial:SaveData={step:0,skill:50,team:50,history:[],phase:"intro",last:0};
@@ -34,7 +34,7 @@ return <main className="yumeiro min-h-[calc(100vh-58px)] text-[#5b3543]">
 <>
 <div className="ym-progress"><span>EPISODE {String(game.step+1).padStart(2,"0")} / 10</span><span>{scene.location}</span></div><div className="ym-scene" style={{backgroundImage:`linear-gradient(180deg,rgba(255,241,245,.25),rgba(90,45,65,.32)),url("${sceneArt[game.step]}")`}}>
 <div className="ym-scene-decor"><span>✧</span><span>🍰</span><span>✦</span></div>
-<div className="ym-portrait"><img key={game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker} src={characterArt[game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker]} alt={(game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker)+" 원작 캐릭터"} onError={e=>{e.currentTarget.src=cover}} /></div>
+<div className="ym-portrait"><img key={game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker} src={characterArt[game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker]} alt={(game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker)+" 원작 캐릭터"} style={{width:`${(portraitFocus[game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker]?.scale??2)*100}%`,height:"auto",maxWidth:"none"}} onError={e=>{e.currentTarget.src=cover}} /></div>
 <div className="ym-scene-label">{scene.title}</div>
 <div className="ym-dialogue"><div className="ym-name">{game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker}</div><p>{spoken.slice(0,visible)}{!complete&&<span className="ym-cursor">▌</span>}</p>{game.phase==="reaction"&&<div className="ym-change"><span>제과 실력 {scene.choices[game.last].skill>0?"+":""}{scene.choices[game.last].skill}</span><span>팀워크 {scene.choices[game.last].team>0?"+":""}{scene.choices[game.last].team}</span></div>}</div>
 </div>
