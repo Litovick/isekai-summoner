@@ -2,7 +2,7 @@ import {useEffect,useState} from "react";
 import {ChefHat,Heart,ArrowRight,RotateCcw,Save,Sparkles} from "lucide-react";
 import {stages,clamp,dessertOf,endingOf,type Dessert} from "./story";
 import cover from "../../assets/anime/17_yumeiro.webp";
-import {characterArt,sceneArt,dessertArt,portraitFocus} from "./art";
+import {characterArt,sceneArt,dessertArt} from "./art";
 import "./styles.css";
 type SaveData={step:number;skill:number;team:number;history:number[];phase:"intro"|"choose"|"reaction"|"end";last:number};
 const initial:SaveData={step:0,skill:50,team:50,history:[],phase:"intro",last:0};
@@ -14,6 +14,7 @@ const [game,setGame]=useState<SaveData>(load);
 const [started,setStarted]=useState(false);
 const [visible,setVisible]=useState(0);
 const scene=stages[game.step];
+const speakerName=game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker;
 const result=game.phase==="end"?endingOf(game.skill,game.team):null;
 const dessert=dessertOf(game.history);
 const grade=game.skill>=75&&game.team>=75?"완벽":game.skill<40||game.team<40?"미완성":"정성 가득";
@@ -32,9 +33,9 @@ return <main className="yumeiro min-h-[calc(100vh-58px)] text-[#5b3543]">
 <header className="ym-header"><div><span className="ym-small">SAINT MARIE ACADEMY</span><h1>꿈빛 파티시엘 <span>✧</span></h1></div><div className="ym-stats"><div><label><ChefHat size={16}/> 제과 실력 <b>{game.skill}</b></label><div className="ym-meter"><i style={{width:game.skill+"%",background:"#c18b47"}}/></div></div><div><label><Heart size={16}/> 팀워크 <b>{game.team}</b></label><div className="ym-meter"><i style={{width:game.team+"%",background:"#ed8fa5"}}/></div></div></div></header>
 {result?<div className="ym-end"><span className="ym-small">CONTEST RESULT</span><div className="ym-dessert"><img src={dessertArt[dessert]} alt={desserts[dessert].name+" 원작 애니메이션 비주얼"} onError={e=>{e.currentTarget.src=cover}} /></div><h2>{endCopy[result].title}</h2><p>{endCopy[result].desc}</p><h3>{grade} · {desserts[dessert].name}</h3><p>{desserts[dessert].desc}</p><div className="ym-end-scores">제과 실력 {game.skill} / 팀워크 {game.team}</div><blockquote>{endCopy[result].comment}</blockquote><button className="ym-primary" onClick={restart}><RotateCcw size={17}/> 다시 도전하기</button></div>:
 <>
-<div className="ym-progress"><span>EPISODE {String(game.step+1).padStart(2,"0")} / 10</span><span>{scene.location}</span></div><div className="ym-scene" style={{backgroundImage:`linear-gradient(180deg,rgba(255,241,245,.25),rgba(90,45,65,.32)),url("${sceneArt[game.step]}")`}}>
+<div className="ym-progress"><span>EPISODE {String(game.step+1).padStart(2,"0")} / 10</span><span>{scene.location}</span></div><div className={`ym-scene ym-stage-${game.step}`}><img className="ym-stage-background" src={sceneArt[game.step]} alt="" aria-hidden="true" onError={e=>{e.currentTarget.src=cover}}/><div className="ym-stage-tint" />
 <div className="ym-scene-decor"><span>✧</span><span>🍰</span><span>✦</span></div>
-<div className="ym-portrait"><img key={game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker} src={characterArt[game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker]} alt={(game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker)+" 원작 캐릭터"} style={{width:`${(portraitFocus[game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker]?.scale??2)*100}%`,height:"auto",maxWidth:"none"}} onError={e=>{e.currentTarget.src=cover}} /></div>
+<div className="ym-character-stage"><img className="ym-character-image" key={speakerName} src={characterArt[speakerName]} alt={speakerName+" 캐릭터 이미지"} onError={e=>{e.currentTarget.src=cover}} /></div>
 <div className="ym-scene-label">{scene.title}</div>
 <div className="ym-dialogue"><div className="ym-name">{game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker}</div><p>{spoken.slice(0,visible)}{!complete&&<span className="ym-cursor">▌</span>}</p>{game.phase==="reaction"&&<div className="ym-change"><span>제과 실력 {scene.choices[game.last].skill>0?"+":""}{scene.choices[game.last].skill}</span><span>팀워크 {scene.choices[game.last].team>0?"+":""}{scene.choices[game.last].team}</span></div>}</div>
 </div>
