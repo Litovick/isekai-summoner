@@ -1,4 +1,4 @@
-import img_coach_new from "../../assets/coach-new.webp";
+import img_coach_new from "../../assets/anzai-portrait.webp";
 import img_hanna from "../../assets/char-hanna.png";
 import img_baekho from "../../assets/char-baekho.png";
 import img_taewoong from "../../assets/char-taewoong.png";

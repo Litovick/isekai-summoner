@@ -197,3 +197,13 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Original Slam Dunk Tailwind tokens; scoped values live on .slam-game. */
+@theme inline {
+  --color-trust: var(--trust);
+  --color-judgment: var(--judgment);
+  --color-court: var(--court);
+  --color-court-dark: var(--court-dark);
+  --color-ink: var(--ink);
+  --color-ball: var(--ball);
+}

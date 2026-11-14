@@ -41,14 +41,6 @@ export function Backdrop({ theme, bg, children }: { theme: Theme; bg: string; ch
       ) : (
         <>
           <div className={cn("absolute inset-x-0 top-0 h-[58%]", evening ? "bg-court-dark" : "bg-ink")}>
-            <div className="absolute inset-x-0 top-6 flex justify-center">
-              <div className="rounded border-4 border-foreground/70 bg-ink px-6 py-2 font-display text-2xl text-ball shadow-xl md:text-3xl">
-                SHOHOKU <span className="text-foreground">00 : 00</span> GUEST
-              </div>
-            </div>
-            <div className="hidden">
-              
-            </div>
             {evening && <div className="absolute inset-0 bg-ink/50" />}
           </div>
           <div className="absolute inset-x-0 bottom-0 h-[42%] bg-court">
