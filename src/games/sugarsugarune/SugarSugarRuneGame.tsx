@@ -79,7 +79,8 @@ const next=()=>{sound("click",s.muted);if(current&&showText<current.text.length)
 const choose=(i:number)=>{if(s.phase!=="choice"||s.answers[s.index]!==undefined)return;const c=stage.choices[i];const type=c.heart+c.virtue>=0?"good":"bad";sound(type,s.muted);setFlash(type);window.setTimeout(()=>setFlash(null),650);setS(p=>({...p,heart:clamp(p.heart+c.heart),virtue:clamp(p.virtue+c.virtue),answers:[...p.answers,i],phase:"reaction",line:0}))};
 const restart=(phase:Phase="opening")=>{sound("click",s.muted);setS(p=>({...initial,phase,unlocked:p.unlocked,muted:p.muted}))};
 const backdrop=s.phase==="title"||s.phase==="guide"||s.phase==="collection"?titleBackdrop:s.phase==="opening"?witchHouse:s.phase==="ending"?palace:stage.background;
-const sceneImage=s.phase==="title"||s.phase==="guide"||s.phase==="collection"?null:s.phase==="opening"?openingBackdrop:s.phase==="ending"?chapterBackdrops[9]:chapterBackdrops[Math.min(s.index,9)];
+const localChapterBackdrops=[1,2,3,4,5].map(n=>`${import.meta.env.BASE_URL}sugarsugarune/backgrounds/chapter ${n}.jpg`);
+const sceneImage=s.phase==="title"||s.phase==="guide"||s.phase==="collection"?null:s.phase==="opening"?openingBackdrop:s.phase==="ending"?chapterBackdrops[9]:s.index<5?localChapterBackdrops[s.index]:chapterBackdrops[Math.min(s.index,9)];
 return <div className="ssr-game" style={{backgroundImage:`linear-gradient(90deg,rgba(17,6,31,.68),rgba(17,6,31,.30)),url("${backdrop}")`}}><div className="ssr-backdrop-blur" aria-hidden="true" style={{backgroundImage:`url("${sceneImage??backdrop}"),url("${backdrop}")`}}/><div className="ssr-backdrop-scene" aria-hidden="true" style={{backgroundImage:`url("${sceneImage??backdrop}"),url("${backdrop}")`}}/>
 <div className="ssr-vignette"/><div className="ssr-stars" aria-hidden="true">✧ · ✦ · ✧ · ✦ · ✧</div>
 {flash&&<div className={`ssr-flash ${flash}`} aria-hidden="true">{flash==="good"?"✦ ♥ ✦":"✧"}</div>}
