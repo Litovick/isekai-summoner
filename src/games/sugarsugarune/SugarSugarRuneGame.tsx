@@ -41,6 +41,38 @@ const endings=[
 {id:"unfinished",title:"미완성의 마녀",subtitle:"다시 시작할 수 있는 이야기",description:"이번 시험에서는 충분한 성과를 얻지 못했다. 하지만 다음 도전을 위한 마법은 이미 시작되었다.",icon:"🌙"}
 ] as const;
 const getEnding=(h:number,v:number)=>h>=80&&v>=80?endings[0]:h>=80?endings[1]:v>=80?endings[2]:endings[3];
+type Judge="쇼콜라"|"바닐라"|"피에르"|"로빈";
+const judges:Judge[]=["쇼콜라","바닐라","피에르","로빈"];
+// Every choice has an independent effect on each character's assessment.
+// Order: Chocolat, Vanilla, Pierre, Robin. Neutral actions are scored near zero.
+const judgeEffects:number[][][]=[
+ [[5,-5,1,-5],[3,6,1,5],[-2,1,3,2]],
+ [[4,-5,4,-5],[3,6,0,5],[0,5,-2,4]],
+ [[-5,-4,4,-5],[8,4,-2,7],[-3,-2,1,-3]],
+ [[-3,-7,2,-4],[3,9,-1,7],[0,-5,1,-3]],
+ [[4,-5,5,-7],[5,6,-2,8],[1,0,3,2]],
+ [[-6,-6,8,-8],[1,2,4,5],[8,5,-5,7]],
+ [[-4,-7,2,-8],[5,6,1,9],[-2,-1,0,-3]],
+ [[-7,-9,9,-10],[8,10,-5,10],[-3,-4,3,-5]],
+ [[-5,-5,3,-7],[9,9,-1,10],[2,3,1,3]],
+ [[-3,-4,5,-5],[8,9,-2,10],[5,10,-3,8]]
+];
+const judgeProfiles:Record<Judge,{focus:string;high:string;mid:string;low:string}>={
+ "쇼콜라":{focus:"용기 · 우정 · 경쟁",high:"흥! 실력도 있고 친구도 챙기다니, 인정할 수밖에 없잖아! 다음엔 나랑 또 승부해!",mid:"제법인데? 하지만 진짜 강한 마녀라면 친구를 외면하지도 않아.",low:"이기려고만 하거나 너무 물러섰어. 네 방식으로 당당하게 부딪쳐 봐!"},
+ "바닐라":{focus:"공감 · 배려 · 신뢰",high:"내 마음을 알아주고 다른 사람도 지켜 줬어. 네 곁이라면 나도 용기를 낼 수 있어.",mid:"좋은 마음이 느껴졌어. 조금만 더 상대의 이야기를 들어주면 좋겠어.",low:"하트보다 소중한 마음도 있어. 다른 사람의 입장에서 한 번 더 생각해 줘."},
+ "피에르":{focus:"유혹 · 판단 · 독립성",high:"힘의 유혹을 알아보면서도 스스로 결정했군. 흥미로워. 쉽게 흔들리지 않는 마녀야.",mid:"가능성은 있어. 하지만 힘을 얻는 대가가 무엇인지 끝까지 생각해 봐.",low:"힘에 휘둘리거나 결정을 남에게 맡겼군. 네 선택의 대가를 감당할 수 있을까?"},
+ "로빈":{focus:"책임감 · 공정함 · 여왕의 자질",high:"결과만이 아니라 과정과 책임까지 살폈구나. 여왕 후보로서 훌륭한 판단이다.",mid:"성장할 자질이 보이는군. 다만 결정이 주변에 미칠 영향도 생각해야 한다.",low:"하트를 모으는 능력만으로 여왕이 될 수는 없단다. 책임을 배워야 해."}
+};
+function characterAssessments(answers:number[]){
+ const totals=judges.map((name,j)=>{
+  const delta=answers.reduce((sum,answer,i)=>sum+(judgeEffects[i]?.[answer]?.[j]??0),0);
+  const score=clamp(50+delta);
+  const grade=score>=75?"S":score>=60?"A":score>=45?"B":score>=30?"C":"D";
+  const profile=judgeProfiles[name];
+  return {name,score,grade,focus:profile.focus,comment:score>=70?profile.high:score>=45?profile.mid:profile.low};
+ });
+ return totals;
+}
 const initial:Save={phase:"title",index:0,line:0,heart:50,virtue:50,answers:[],unlocked:[],muted:false};
 const key="isekai:sugarsugarune:v1";
 const clamp=(v:number)=>Math.max(0,Math.min(100,v));
@@ -88,7 +120,7 @@ return <div className="ssr-game" style={{backgroundImage:`linear-gradient(90deg,
 {["opening","story","choice","reaction","ending"].includes(s.phase)&&<div className="ssr-hud"><div className="ssr-stat"><span><Heart size={16} fill="#ff74b3"/> 하트 포인트 <b>{s.heart}</b></span><div className="ssr-meter"><i style={{width:`${s.heart}%`,background:"linear-gradient(90deg,#e64190,#ffb2d6)"}}/></div></div><div className="ssr-stat"><span><Sparkles size={16}/> 마녀의 자질 <b>{s.virtue}</b></span><div className="ssr-meter"><i style={{width:`${s.virtue}%`,background:"linear-gradient(90deg,#8653d7,#d7a6ff)"}}/></div></div></div>}
 {(s.phase==="title"||s.phase==="guide"||s.phase==="collection")&&<main className="ssr-center">
 {s.phase==="title"&&<div className="ssr-title-screen"><div className="ssr-big-heart"><img src={pinkHeart} alt="마법의 하트"/></div><p className="ssr-kicker">✦ 마계 여왕 선발 시험 ✦</p><h1>슈가슈가룬</h1><h2>당신은 마녀 여왕이 될 수 있을까?</h2><p className="ssr-lead">하트를 모으고, 진심을 지켜라.<br/>당신의 선택이 마계의 미래를 바꾼다.</p><div className="ssr-buttons"><button className="primary" onClick={()=>restart()}><Crown size={20}/> 여왕 시험 시작</button><button onClick={()=>setS(p=>({...p,phase:"guide"}))}><BookOpen size={18}/> 게임 방법</button><button onClick={()=>setS(p=>({...p,phase:"collection"}))}><Heart size={18}/> 엔딩 컬렉션</button></div>{s.answers.length>0&&<p className="ssr-save-note">새 게임을 시작하면 이전 진행 기록이 초기화됩니다. 엔딩 컬렉션은 유지됩니다.</p>}</div>}
-{s.phase==="guide"&&<section className="ssr-paper"><h2>✧ 마녀 여왕의 시험 안내 ✧</h2><p>당신은 쇼콜라와 바닐라와 함께 인간계로 파견된 새로운 여왕 후보입니다.</p><p><img src={pinkHeart} alt=""/> <b>하트 포인트</b> — 사람들의 마음을 얻는 능력. 시작 점수 50점.</p><p><img src={goldHeart} alt=""/> <b>마녀의 자질</b> — 공감과 용기, 올바른 판단. 시작 점수 50점.</p><p>10개의 상황마다 세 가지 선택지 중 하나를 선택하세요. 두 능력치는 0~100 사이에서 변합니다.</p><p>하트와 자질 모두 80점 이상이면 진정한 마녀 여왕 엔딩! 다른 결과에도 각자의 이야기가 기다립니다.</p><p>대화창을 클릭하면 다음 대사로 진행됩니다. 자동 저장을 지원합니다.</p><button className="primary" onClick={()=>restart()}>시험 시작 <ArrowRight size={18}/></button><button onClick={()=>setS(p=>({...p,phase:"title"}))}>돌아가기</button></section>}
+{s.phase==="guide"&&<section className="ssr-paper"><h2>✧ 마녀 여왕의 시험 안내 ✧</h2><p>당신은 쇼콜라와 바닐라와 함께 인간계로 파견된 새로운 여왕 후보입니다.</p><p><img src={pinkHeart} alt=""/> <b>하트 포인트</b> — 사람들의 마음을 얻는 능력. 시작 점수 50점.</p><p><img src={goldHeart} alt=""/> <b>마녀의 자질</b> — 공감과 용기, 올바른 판단. 시작 점수 50점.</p><p>10개의 상황마다 세 가지 선택지 중 하나를 선택하세요. 두 능력치는 0~100 사이에서 변합니다.</p><p>하트와 자질 모두 80점 이상이면 진정한 마녀 여왕 엔딩! 최종 결과에서 쇼콜라·바닐라·피에르·로빈의 개별 평가도 확인할 수 있어요. 다른 결과에도 각자의 이야기가 기다립니다.</p><p>대화창을 클릭하면 다음 대사로 진행됩니다. 자동 저장을 지원합니다.</p><button className="primary" onClick={()=>restart()}>시험 시작 <ArrowRight size={18}/></button><button onClick={()=>setS(p=>({...p,phase:"title"}))}>돌아가기</button></section>}
 {s.phase==="collection"&&<section className="ssr-paper"><h2>✧ 엔딩 컬렉션 ✧</h2><p>해금한 엔딩 {s.unlocked.length} / 4</p><div className="ssr-end-grid">{endings.map(e=><div className="ssr-end-tile" key={e.id}><span>{s.unlocked.includes(e.id)?e.icon:"🔒"}</span><strong>{s.unlocked.includes(e.id)?e.title:"??? 잠긴 엔딩"}</strong><small>{s.unlocked.includes(e.id)?e.subtitle:"여왕 시험에 도전해 해금하세요."}</small></div>)}</div><button onClick={()=>setS(p=>({...p,phase:"title"}))}>돌아가기</button></section>}
 </main>}
 {["opening","story","choice","reaction"].includes(s.phase)&&<main className="ssr-play"><div className="ssr-stage-heading"><span>{s.phase==="opening"?"PROLOGUE":`CHAPTER ${String(s.index+1).padStart(2,"0")} / 10`}</span><strong>{s.phase==="opening"?"여왕 후보의 소환":stage.title}</strong><small>{s.phase==="opening"?"마계":stage.location}</small></div><div className="ssr-cast">{(s.phase==="opening"?["쇼콜라","바닐라","로빈"] as Character[]:stage.cast).filter(c=>c!=="나"&&c!=="내레이션").map(c=><CharacterCard key={c} name={c} active={current?.who===c}/>)}</div><div className="ssr-bottom">
@@ -96,7 +128,7 @@ return <div className="ssr-game" style={{backgroundImage:`linear-gradient(90deg,
 {s.phase==="choice"&&<div className="ssr-choice-area"><h3>✦ {stage.prompt}</h3><div className="ssr-choices">{stage.choices.map((c,i)=><button key={i} onClick={()=>choose(i)}><span className="ssr-choice-letter">{String.fromCharCode(65+i)}</span><span>{c.text}</span><ChevronRight size={18}/></button>)}</div></div>}
 {s.phase==="reaction"&&<div className="ssr-delta">선택 결과 <span>{stage.choices[chosen].heart>=0?"+":""}{stage.choices[chosen].heart} <img src={pinkHeart} alt="하트"/></span><span>{stage.choices[chosen].virtue>=0?"+":""}{stage.choices[chosen].virtue} <img src={goldHeart} alt="자질"/></span></div>}
 </div></main>}
-{s.phase==="ending"&&<main className="ssr-center"><section className="ssr-ending"><div className="ssr-crown">{ending.icon}</div><p className="ssr-kicker">✦ QUEEN'S TRIAL COMPLETE ✦</p><h1>{ending.title}</h1><h2>{ending.subtitle}</h2><p>{ending.description}</p><div className="ssr-final-stats"><span><img src={pinkHeart} alt=""/> 하트 {s.heart}</span><span><img src={goldHeart} alt=""/> 자질 {s.virtue}</span></div><p className="ssr-result-note">엔딩 컬렉션에 기록되었습니다.</p><div className="ssr-buttons"><button className="primary" onClick={()=>restart()}><RotateCcw size={18}/> 다시 도전</button><button onClick={()=>setS(p=>({...p,phase:"collection"}))}>엔딩 컬렉션</button><button onClick={()=>setS(p=>({...p,phase:"title"}))}>타이틀로</button></div></section></main>}
+{s.phase==="ending"&&<main className="ssr-center"><section className="ssr-ending"><div className="ssr-crown">{ending.icon}</div><p className="ssr-kicker">✦ QUEEN'S TRIAL COMPLETE ✦</p><h1>{ending.title}</h1><h2>{ending.subtitle}</h2><p>{ending.description}</p><div className="ssr-final-stats"><span><img src={pinkHeart} alt=""/> 하트 {s.heart}</span><span><img src={goldHeart} alt=""/> 자질 {s.virtue}</span></div><section className="ssr-judge-results" aria-label="캐릭터별 최종 평가"><h3>✧ 캐릭터별 최종 평가 ✧</h3><p className="ssr-judge-intro">당신이 10개 챕터에서 내린 선택을 각 캐릭터의 관점으로 평가했어요.</p><div className="ssr-judge-grid">{characterAssessments(s.answers).map(r=><article className="ssr-judge-card" key={r.name}><div className="ssr-judge-portrait">{portraits[r.name]&&<img src={portraits[r.name]} alt={r.name}/>}</div><div className="ssr-judge-body"><div className="ssr-judge-head"><strong>{r.name}</strong><span className="ssr-judge-grade">{r.grade} 등급</span></div><small>{r.focus}</small><div className="ssr-judge-meter" role="progressbar" aria-label={r.name+" 평가 점수"} aria-valuemin={0} aria-valuemax={100} aria-valuenow={r.score}><i style={{width:`${r.score}%`}}/></div><b>{r.score} / 100</b><p>“{r.comment}”</p></div></article>)}</div></section><p className="ssr-result-note">엔딩 컬렉션에 기록되었습니다.</p><div className="ssr-buttons"><button className="primary" onClick={()=>restart()}><RotateCcw size={18}/> 다시 도전</button><button onClick={()=>setS(p=>({...p,phase:"collection"}))}>엔딩 컬렉션</button><button onClick={()=>setS(p=>({...p,phase:"title"}))}>타이틀로</button></div></section></main>}
 <footer className="ssr-footer"><img src={blackHeart} alt=""/> SUGAR SUGAR RUNE · FAN-MADE INTERACTIVE STORY <img src={blackHeart} alt=""/></footer>
 </div>
 }

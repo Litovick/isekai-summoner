@@ -28,3 +28,20 @@
 .ssr-backdrop-scene{z-index:-1!important;background-size:contain,contain!important;background-position:center center!important;filter:brightness(.45) saturate(.75)!important;opacity:.82}
 .ssr-vignette{position:fixed;inset:0;z-index:0;pointer-events:none}
 @media(max-width:600px){.ssr-backdrop-scene{background-size:contain,contain!important;background-position:center 42%!important;opacity:.72}}
+
+/* Character-specific assessment, derived from the saved choices. */
+.ssr-judge-results{width:min(100%,860px);margin:28px auto 18px;text-align:left}
+.ssr-judge-results h3{text-align:center;color:#ffe2a4;font-size:clamp(19px,2.6vw,25px);margin:0 0 7px}
+.ssr-judge-intro{text-align:center;color:#e5cbe9;font-size:13px;margin:0 0 18px}
+.ssr-judge-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.ssr-judge-card{display:flex;min-width:0;overflow:hidden;border:1px solid #e9b8e899;border-radius:16px;background:linear-gradient(135deg,#291034ef,#130d2ee8);box-shadow:0 7px 22px #09021666}
+.ssr-judge-portrait{width:34%;min-width:92px;align-self:stretch;display:flex;align-items:flex-end;justify-content:center;background:linear-gradient(0deg,#a45a8e44,transparent);overflow:hidden}
+.ssr-judge-portrait img{display:block;width:100%;height:195px;object-fit:contain;object-position:bottom center;filter:drop-shadow(0 5px 6px #0008)}
+.ssr-judge-body{flex:1;min-width:0;padding:14px 12px;color:#fff}
+.ssr-judge-head{display:flex;justify-content:space-between;align-items:center;gap:5px}
+.ssr-judge-head strong{font-size:18px}.ssr-judge-grade{font-size:12px;font-weight:800;border:1px solid #f3bbeb;border-radius:20px;padding:3px 9px;color:#ffd6f2;white-space:nowrap}
+.ssr-judge-body small{display:block;color:#d5b9e2;margin:6px 0 11px;font-size:11px}
+.ssr-judge-meter{height:7px;background:#10071c;border-radius:20px;overflow:hidden;margin:0 0 4px}.ssr-judge-meter i{display:block;height:100%;background:linear-gradient(90deg,#c75bd4,#ffb9d9);border-radius:20px}
+.ssr-judge-body>b{font-size:12px;color:#ffe5aa}
+.ssr-judge-body p{font-size:13px;line-height:1.6;color:#f5e4f6;margin:9px 0 0}
+@media(max-width:650px){.ssr-judge-grid{grid-template-columns:1fr}.ssr-judge-portrait{width:30%;min-width:92px}.ssr-judge-portrait img{height:165px}.ssr-judge-body{padding:12px}}
