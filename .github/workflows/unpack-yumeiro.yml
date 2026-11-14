@@ -33,6 +33,25 @@ jobs:
               assert f.is_file() and f.stat().st_size>1000, f'Missing background: {f}'
           print('Validated 5 portraits + 10 backgrounds')
           PY
+      - name: Trim transparent canvas around character illustrations
+        run: |
+          python3 -m pip install --quiet Pillow
+          python3 - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          for f in sorted(Path('public/yumeiro/characters').glob('*.png')):
+              image=Image.open(f).convert('RGBA')
+              alpha=image.getchannel('A')
+              mask=alpha.point(lambda value:255 if value>30 else 0)
+              bbox=mask.getbbox()
+              if not bbox:
+                  raise RuntimeError(f'No visible character artwork in {f}')
+              left,top,right,bottom=bbox
+              margin=16
+              crop=(max(0,left-margin),max(0,top-margin),min(image.width,right+margin),min(image.height,bottom+margin))
+              image.crop(crop).save(f,optimize=True)
+              print(f, 'trimmed to',crop)
+          PY
       - name: Commit extracted images into the site
         run: |
           git config user.name "github-actions[bot]"
