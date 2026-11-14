@@ -19,3 +19,12 @@
 .ssr-vignette{z-index:0;background:linear-gradient(90deg,#10081b91,transparent 24%,transparent 76%,#10081b91),linear-gradient(0deg,#12071cb5,transparent 48%)}
 .ssr-game>.ssr-backdrop-scene,.ssr-game>.ssr-backdrop-blur{isolation:isolate}
 @media(max-width:600px){.ssr-backdrop-scene{background-size:contain,contain;background-position:center 37%}.ssr-backdrop-blur{filter:blur(22px) brightness(.36)}}
+
+/* Chapter art: keep a single scene within the viewport, never a poster-sized
+   full-document image behind the dialogue. The blur only fills side gutters. */
+.ssr-game{isolation:isolate}
+.ssr-backdrop-blur,.ssr-backdrop-scene{position:fixed!important;inset:0!important;z-index:-2!important;transform:none!important}
+.ssr-backdrop-blur{background-size:cover,cover!important;background-position:center center!important;filter:blur(20px) brightness(.34) saturate(.65)!important;transform:scale(1.08)!important}
+.ssr-backdrop-scene{z-index:-1!important;background-size:contain,contain!important;background-position:center center!important;filter:brightness(.45) saturate(.75)!important;opacity:.82}
+.ssr-vignette{position:fixed;inset:0;z-index:0;pointer-events:none}
+@media(max-width:600px){.ssr-backdrop-scene{background-size:contain,contain!important;background-position:center 42%!important;opacity:.72}}
