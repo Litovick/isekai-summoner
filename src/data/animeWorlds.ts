@@ -16,7 +16,7 @@ import jujutsuCover from "@/assets/anime/13_jujutsu.webp";
 import demonslayerCover from "@/assets/anime/14_demonslayer.webp";
 import deathnoteCover from "@/assets/anime/15_deathnote.webp";
 import frierenCover from "@/assets/anime/16_frieren.webp";
-import yumeiroCover from "@/assets/anime/17_yumeiro.webp";
+const yumeiroCover = `${import.meta.env.BASE_URL}yumeiro/cover.webp.webp`;
 import aotCover from "@/assets/anime/18_aot.webp";
 import narutoCover from "@/assets/anime/19_naruto.webp";
 import bleachCover from "@/assets/anime/20_bleach.webp";
