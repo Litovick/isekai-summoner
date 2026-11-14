@@ -10,3 +10,12 @@
 .ssr-avatar img{display:block;width:100%;height:100%;object-fit:contain;object-position:bottom center;filter:drop-shadow(0 9px 10px #10051dba)}
 .ssr-character-name{position:relative;z-index:3;margin-top:-6px;background:#290c39ec;border:1px solid #ffd2e6;box-shadow:0 4px 14px #0009}
 @media(max-width:600px){.ssr-cast{min-height:clamp(190px,37vh,360px);gap:0;padding:8px 2px 0}.ssr-character{max-width:33.33%;flex-basis:33.33%}.ssr-avatar{height:clamp(185px,35vh,340px)}.ssr-character-name{padding:3px 8px;font-size:11px}.ssr-character.active{transform:translateY(0) scale(1.03)}}
+
+/* Keep 4:3 anime stills intact on 16:9 and portrait screens: no stretching or forced cropping. */
+.ssr-game{background-size:cover;background-position:center;background-repeat:no-repeat}
+.ssr-backdrop-blur,.ssr-backdrop-scene{position:absolute;inset:0;z-index:-2;pointer-events:none;background-repeat:no-repeat}
+.ssr-backdrop-blur{inset:-24px;background-size:cover,cover;background-position:center;filter:blur(17px) brightness(.46) saturate(.78);transform:scale(1.035)}
+.ssr-backdrop-scene{z-index:-1;background-size:contain,contain;background-position:center center;background-repeat:no-repeat;filter:brightness(.68) saturate(.92)}
+.ssr-vignette{z-index:0;background:linear-gradient(90deg,#10081b91,transparent 24%,transparent 76%,#10081b91),linear-gradient(0deg,#12071cb5,transparent 48%)}
+.ssr-game>.ssr-backdrop-scene,.ssr-game>.ssr-backdrop-blur{isolation:isolate}
+@media(max-width:600px){.ssr-backdrop-scene{background-size:contain,contain;background-position:center 37%}.ssr-backdrop-blur{filter:blur(22px) brightness(.36)}}
