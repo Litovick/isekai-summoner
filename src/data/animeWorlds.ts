@@ -171,7 +171,7 @@ export const ANIME_WORLDS: AnimeWorld[] = [
     number: 17,
     title: "꿈빛 파티시엘",
     goal: "당신은 파티시엘이 될 수 있을까?",
-    status: "coming_soon",
+    status: "available",
     coverImage: yumeiroCover,
     accent: "from-rose-400/70 to-amber-300/70",
   },
