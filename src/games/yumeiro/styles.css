@@ -10,3 +10,10 @@
 .ym-dessert{width:min(330px,85%);height:235px;margin:20px auto;overflow:hidden;border:6px solid white;border-radius:22px;box-shadow:0 12px 24px #a46c7e44}
 .ym-dessert img{width:100%;height:100%;object-fit:cover}
 @media(max-width:680px){.ym-portrait{top:10%;width:160px;height:160px}.ym-dialogue{min-height:110px}}
+
+/* Dialogue portraits follow Slam Dunk's image-first presentation:
+   crop the primary facial illustration out of each reference sheet,
+   rather than showing a framed character-sheet card. */
+.ym-portrait{top:4%;width:clamp(185px,30vw,310px);height:clamp(215px,34vw,350px);border:0;border-radius:0;background:transparent;box-shadow:none;filter:drop-shadow(0 12px 10px #56324866);overflow:hidden}
+.ym-portrait img{position:absolute;top:0;left:0;object-fit:initial;object-position:initial;max-width:none;height:auto}
+@media(max-width:680px){.ym-portrait{top:7%;width:195px;height:215px}}
