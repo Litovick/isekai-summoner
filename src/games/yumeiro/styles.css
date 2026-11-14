@@ -31,6 +31,7 @@
 .ym-scene-label{position:absolute;z-index:4;top:16px;left:18px;max-width:70%;border:1px solid #ffffffc9;background:#fff8f1e9;backdrop-filter:blur(10px);padding:8px 16px;border-radius:999px;font-size:12px;font-weight:900;box-shadow:0 4px 14px #815b7a25}
 .ym-character-stage{position:absolute;z-index:3;inset:12px 0 0;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
 .ym-character-image{display:block;width:auto;max-width:min(56%,440px);height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 10px 15px #44304373);animation:ym-character-float 3.6s ease-in-out infinite}
+.ym-fairy .ym-character-image{height:57%;max-width:55%;margin-bottom:70px;filter:drop-shadow(0 10px 13px #79577b7a)}
 .ym-dialogue{position:absolute;z-index:5;left:18px;right:18px;bottom:15px;min-height:118px;border:2px solid #fff;background:#fff9f7ef;backdrop-filter:blur(12px);border-radius:17px;padding:24px 23px 17px;box-shadow:0 9px 25px #62465748}
 .ym-name{position:absolute;top:-18px;left:23px;background:var(--ym-pink);padding:7px 19px;border-radius:999px;color:#fff;font-size:13px;letter-spacing:.03em;font-weight:900;box-shadow:0 4px 10px #8f5a7550}
 .ym-dialogue p{font-size:clamp(14px,1.9vw,18px);line-height:1.6;font-weight:750}
