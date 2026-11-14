@@ -1,0 +1,44 @@
+name: Unpack Yumeiro visual assets
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/unpack-yumeiro.yml"
+      - "yumeiro_visual_assets.zip"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Extract character portraits and scene backgrounds
+        run: |
+          set -euo pipefail
+          test -f yumeiro_visual_assets.zip
+          mkdir -p public/yumeiro
+          unzip -oq yumeiro_visual_assets.zip -d public/yumeiro
+          python3 - <<'PY'
+          from pathlib import Path
+          root=Path('public/yumeiro')
+          names=['gam-ddalgi.png','won-gaon.png','an-doha.png','seo-rojin.png','vanilla.png']
+          for name in names:
+              f=root/'characters'/name
+              assert f.is_file() and f.stat().st_size>1000, f'Missing portrait: {f}'
+          for i in range(1,11):
+              f=root/'backgrounds'/f'stage-{i:02d}.webp'
+              assert f.is_file() and f.stat().st_size>1000, f'Missing background: {f}'
+          print('Validated 5 portraits + 10 backgrounds')
+          PY
+      - name: Commit extracted images into the site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/yumeiro/
+          if ! git diff --cached --quiet; then
+            git commit -m "Add Yumeiro character portraits and scene artwork"
+            git push
+          fi
