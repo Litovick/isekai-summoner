@@ -19,7 +19,7 @@ export const sceneArt = Array.from(
 );
 
 export const dessertArt = {
-  strawberry: `${root}/desserts/strawberry.svg`,
-  chocolate: `${root}/desserts/chocolate.svg`,
-  creative: `${root}/desserts/creative.svg`,
+  strawberry: `${root}/desserts/strawberry.webp`,
+  chocolate: `${root}/desserts/chocolate.webp`,
+  creative: `${root}/desserts/creative.webp`,
 } as const;
