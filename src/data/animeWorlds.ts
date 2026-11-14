@@ -81,7 +81,7 @@ export const ANIME_WORLDS: AnimeWorld[] = [
     number: 7,
     title: "슈가슈가룬",
     goal: "당신은 마녀 여왕이 될 수 있을까?",
-    status: "coming_soon",
+    status: "available",
     coverImage: sugarsugarCover,
     accent: "from-violet-500/70 to-fuchsia-400/70",
   },
