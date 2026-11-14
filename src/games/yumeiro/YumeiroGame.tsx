@@ -2,12 +2,12 @@ import {useEffect,useState} from "react";
 import {ChefHat,Heart,ArrowRight,RotateCcw,Save,Sparkles} from "lucide-react";
 import {stages,clamp,dessertOf,endingOf,type Dessert} from "./story";
 import cover from "../../assets/anime/17_yumeiro.webp";
+import {characterArt,sceneArt,dessertArt} from "./art";
 import "./styles.css";
 type SaveData={step:number;skill:number;team:number;history:number[];phase:"intro"|"choose"|"reaction"|"end";last:number};
 const initial:SaveData={step:0,skill:50,team:50,history:[],phase:"intro",last:0};
 const KEY="isekai-yumeiro-v1";
 const desserts:Record<Dessert,{name:string;icon:string;desc:string}>={strawberry:{name:"딸기 쇼트케이크",icon:"🍓",desc:"친구들의 마음을 담은 부드러운 달콤함"},chocolate:{name:"초콜릿 케이크",icon:"🍫",desc:"섬세한 기술로 완성한 깊은 풍미"},creative:{name:"창작 디저트",icon:"🍰",desc:"자신만의 상상력을 담은 새로운 맛"}};
-const portraits:Record<string,string>={"감딸기":"🍓","원가온":"🍫","안도하":"🍵","서로진":"🌹","바닐라":"🧚"};
 function load():SaveData{try{const v=JSON.parse(localStorage.getItem(KEY)||"null");if(v&&Number.isInteger(v.step)&&v.step>=0&&v.step<stages.length&&Array.isArray(v.history)&&["intro","choose","reaction","end"].includes(v.phase))return v}catch{}return initial}
 export default function YumeiroGame(){
 const [game,setGame]=useState<SaveData>(load);
@@ -30,11 +30,11 @@ return <main className="yumeiro min-h-[calc(100vh-58px)] text-[#5b3543]">
 {!started?<section className="ym-title"><div className="ym-crown">✧ SAINT MARIE ACADEMY ✧</div><img className="ym-cover" src={cover} alt="꿈빛 파티시엘 작품 이미지" /><h1>꿈빛 파티시엘</h1><h2>Sweet Challenge</h2><p>감딸기와 스위트 왕자들과 함께<br/>세상에서 하나뿐인 디저트를 완성해 봐!</p><button className="ym-primary" onClick={()=>{setGame(initial);setStarted(true)}}>새 게임 시작 <ArrowRight size={18}/></button>{(game.history.length>0||game.step>0)&&<button className="ym-outline" onClick={()=>setStarted(true)}><Save size={16}/> 이어하기</button>}</section>:
 <section className="ym-layout">
 <header className="ym-header"><div><span className="ym-small">SAINT MARIE ACADEMY</span><h1>꿈빛 파티시엘 <span>✧</span></h1></div><div className="ym-stats"><div><label><ChefHat size={16}/> 제과 실력 <b>{game.skill}</b></label><div className="ym-meter"><i style={{width:game.skill+"%",background:"#c18b47"}}/></div></div><div><label><Heart size={16}/> 팀워크 <b>{game.team}</b></label><div className="ym-meter"><i style={{width:game.team+"%",background:"#ed8fa5"}}/></div></div></div></header>
-{result?<div className="ym-end"><span className="ym-small">CONTEST RESULT</span><div className="ym-dessert">{desserts[dessert].icon}</div><h2>{endCopy[result].title}</h2><p>{endCopy[result].desc}</p><h3>{grade} · {desserts[dessert].name}</h3><p>{desserts[dessert].desc}</p><div className="ym-end-scores">제과 실력 {game.skill} / 팀워크 {game.team}</div><blockquote>{endCopy[result].comment}</blockquote><button className="ym-primary" onClick={restart}><RotateCcw size={17}/> 다시 도전하기</button></div>:
+{result?<div className="ym-end"><span className="ym-small">CONTEST RESULT</span><div className="ym-dessert"><img src={dessertArt[dessert]} alt={desserts[dessert].name+" 원작 애니메이션 비주얼"} onError={e=>{e.currentTarget.src=cover}} /></div><h2>{endCopy[result].title}</h2><p>{endCopy[result].desc}</p><h3>{grade} · {desserts[dessert].name}</h3><p>{desserts[dessert].desc}</p><div className="ym-end-scores">제과 실력 {game.skill} / 팀워크 {game.team}</div><blockquote>{endCopy[result].comment}</blockquote><button className="ym-primary" onClick={restart}><RotateCcw size={17}/> 다시 도전하기</button></div>:
 <>
-<div className="ym-progress"><span>EPISODE {String(game.step+1).padStart(2,"0")} / 10</span><span>{scene.location}</span></div><div className="ym-scene">
+<div className="ym-progress"><span>EPISODE {String(game.step+1).padStart(2,"0")} / 10</span><span>{scene.location}</span></div><div className="ym-scene" style={{backgroundImage:`linear-gradient(180deg,rgba(255,241,245,.25),rgba(90,45,65,.32)),url("${sceneArt[game.step]}")`}}>
 <div className="ym-scene-decor"><span>✧</span><span>🍰</span><span>✦</span></div>
-<div className="ym-portrait" aria-hidden="true">{portraits[game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker]||"🍓"}</div>
+<div className="ym-portrait"><img key={game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker} src={characterArt[game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker]} alt={(game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker)+" 원작 캐릭터"} onError={e=>{e.currentTarget.src=cover}} /></div>
 <div className="ym-scene-label">{scene.title}</div>
 <div className="ym-dialogue"><div className="ym-name">{game.phase==="reaction"?scene.choices[game.last].speaker:scene.speaker}</div><p>{spoken.slice(0,visible)}{!complete&&<span className="ym-cursor">▌</span>}</p>{game.phase==="reaction"&&<div className="ym-change"><span>제과 실력 {scene.choices[game.last].skill>0?"+":""}{scene.choices[game.last].skill}</span><span>팀워크 {scene.choices[game.last].team>0?"+":""}{scene.choices[game.last].team}</span></div>}</div>
 </div>
