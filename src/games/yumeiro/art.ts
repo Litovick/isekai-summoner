@@ -23,3 +23,12 @@ strawberry:"https://stat.ameba.jp/user_images/20180415/10/ichigomomoron/93/5e/j/
 chocolate:"https://www.animeclick.it/images/Anime_big/YumeiroPatissiereSPProfessional/YumeiroPatissiereSPProfessional17.jpg",
 creative:"https://3.bp.blogspot.com/-SrKMdW4MyWY/Ufq22Vm2cVI/AAAAAAAAFeo/vDGDxrAR4Sg/s1600/captura-ks-yumeiro-patissiere-01-720p-mp4-3.png"
 };
+
+/** Focus on the individual face, not the multi-pose concept sheet. */
+export const portraitFocus:Record<string,{scale:number;x:number;y:number}>={
+"감딸기":{scale:2.25,x:0,y:0},
+"원가온":{scale:2.25,x:0,y:0},
+"안도하":{scale:2.15,x:0,y:0},
+"서로진":{scale:2.15,x:0,y:0},
+"바닐라":{scale:2.2,x:0,y:0}
+};
