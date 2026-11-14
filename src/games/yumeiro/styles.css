@@ -17,3 +17,19 @@
 .ym-portrait{top:4%;width:clamp(185px,30vw,310px);height:clamp(215px,34vw,350px);border:0;border-radius:0;background:transparent;box-shadow:none;filter:drop-shadow(0 12px 10px #56324866);overflow:hidden}
 .ym-portrait img{position:absolute;top:0;left:0;object-fit:initial;object-position:initial;max-width:none;height:auto}
 @media(max-width:680px){.ym-portrait{top:7%;width:195px;height:215px}}
+
+/* Stage art is rendered as an independent, non-cropping image layer. */
+.ym-scene{background:#eac7ca!important;isolation:isolate}
+.ym-stage-background{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center center;z-index:0;background:linear-gradient(120deg,#e5bcc7,#f7e5db)}
+.ym-stage-tint{position:absolute;inset:0;z-index:0;background:linear-gradient(to bottom,transparent 30%,#4a243122 80%,#4a243133)}
+.ym-scene:before{display:none}
+.ym-scene-decor{z-index:1;pointer-events:none}
+.ym-scene-label{z-index:3}
+.ym-character-stage{position:absolute;z-index:2;left:50%;top:7%;transform:translateX(-50%);height:63%;width:min(38%,290px);display:flex;justify-content:center;align-items:center;pointer-events:none}
+.ym-character-image{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;filter:drop-shadow(0 5px 10px #5d3b4d66);animation:ymfloat-character 3s ease-in-out infinite}
+.ym-dialogue{z-index:4}
+.ym-stage-1 .ym-stage-background,.ym-stage-5 .ym-stage-background{object-position:center 38%}
+.ym-stage-2 .ym-stage-background,.ym-stage-6 .ym-stage-background{object-position:center 55%}
+.ym-stage-9 .ym-stage-background{object-position:center 45%}
+@keyframes ymfloat-character{50%{transform:translateY(-6px)}}
+@media(max-width:680px){.ym-character-stage{width:56%;height:56%;top:10%}.ym-stage-background{object-position:center center}.ym-dialogue{min-height:110px}}
