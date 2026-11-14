@@ -45,7 +45,7 @@ const initial:Save={phase:"title",index:0,line:0,heart:50,virtue:50,answers:[],u
 const key="isekai:sugarsugarune:v1";
 const clamp=(v:number)=>Math.max(0,Math.min(100,v));
 const backgrounds=[classroom,garden,witchHouse,street,darkMagic,palace];
-const portraits:Partial<Record<Character,string>>={};
+const portraits:Partial<Record<Character,string>>={쇼콜라:`${import.meta.env.BASE_URL}sugarsugarune/characters/chocolat.png`,바닐라:`${import.meta.env.BASE_URL}sugarsugarune/characters/vanilla.png`,피에르:`${import.meta.env.BASE_URL}sugarsugarune/characters/pierre.png`,로빈:`${import.meta.env.BASE_URL}sugarsugarune/characters/robin.png`};
 function sound(type:"click"|"good"|"bad",muted:boolean){if(muted)return;try{const Ctx=window.AudioContext;const ctx=new Ctx();const osc=ctx.createOscillator();const gain=ctx.createGain();osc.type="sine";osc.frequency.value=type==="good"?880:type==="bad"?260:600;gain.gain.setValueAtTime(.025,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.14);osc.connect(gain);gain.connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+.14);osc.onended=()=>void ctx.close()}catch{/* Audio is optional */}}
 function CharacterCard({name,active}:{name:Character;active:boolean}){const img=portraits[name];return <div className={`ssr-character ${active?"active":""}`}><div className="ssr-avatar">{img?<img src={img} alt={name}/>:<span>{name==="쇼콜라"?"🍫":name==="바닐라"?"🍦":name==="피에르"?"🌙":"🎩"}</span>}</div><span className="ssr-character-name">{name}</span></div>}
 export default function SugarSugarRuneGame(){
