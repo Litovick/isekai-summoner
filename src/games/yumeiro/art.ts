@@ -1,15 +1,14 @@
 /**
- * Bundled, project-generated artwork extracted from yumeiro_visual_assets.zip.
- * The assets are new interpretations, not original anime frames.
- * Files are served from /public so Vercel/Vite can load them without hotlinking.
+ * Character and scene artwork served from /public/yumeiro.
+ * Character PNGs are individually stored with transparent backgrounds.
  */
 const root = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/yumeiro`;
 
 export const characterArt: Record<string, string> = {
-  "감딸기": `${root}/characters/gam-ddalgi.png`,
-  "원가온": `${root}/characters/won-gaon.png`,
-  "안도하": `${root}/characters/an-doha.png`,
-  "서로진": `${root}/characters/seo-rojin.png`,
+  "감딸기": `${root}/characters/ddalgi.png`,
+  "원가온": `${root}/characters/gaon.png`,
+  "안도하": `${root}/characters/doha.png`,
+  "서로진": `${root}/characters/rojin.png`,
   "바닐라": `${root}/characters/vanilla.png`,
 };
 
